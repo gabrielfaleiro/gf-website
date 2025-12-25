@@ -20,7 +20,7 @@ La inteligencia artificial no es solo una tendencia pasajera; es el nuevo paradi
 Estamos ante la era dorada de la creación de producto. La barrera técnica ha bajado, permitiendo que la estrategia y la creatividad vuelvan a ser el centro del desarrollo.
   `,
   author: 'Gabriel Faleiro',
-  date: '10 Mayo, 2024',
+  date: new Date('2024-05-10'),
   category: Category.TECNOLOGIA,
   imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800',
 };

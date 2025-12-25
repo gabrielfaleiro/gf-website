@@ -7,6 +7,14 @@ interface PostCardProps {
   onClick?: (id: string) => void;
 }
 
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('es-ES', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  });
+};
+
 export const PostCard: React.FC<PostCardProps> = ({ post, onClick }) => {
   return (
     <article 
@@ -38,7 +46,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onClick }) => {
             </div>
             <span className="text-xs font-bold text-gray-700">{post.author}</span>
           </div>
-          <span className="text-[11px] font-semibold text-gray-400">{post.date}</span>
+          <span className="text-[11px] font-semibold text-gray-400">{formatDate(post.date)}</span>
         </div>
       </div>
     </article>

@@ -47,6 +47,14 @@ const PRODUCTS: Product[] = [
   }
 ];
 
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('es-ES', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  });
+};
+
 const Navigation = ({ currentView, setCurrentView }: { currentView: View, setCurrentView: (v: View) => void }) => (
   <nav className="glass-nav border-b fixed top-0 w-full z-50">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -262,7 +270,6 @@ const BlogView = ({
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {latestPosts.map(post => (
-            // Fix: Removed invalid onDelete prop from PostCard component
             <PostCard key={post.id} post={post} onClick={onPostClick} />
           ))}
         </div>
@@ -303,7 +310,7 @@ const BlogView = ({
                     <span className="text-blue-900 text-[10px] font-black uppercase tracking-widest mb-2">{post.category}</span>
                     <h4 className="text-xl font-bold text-gray-900 mb-2 leading-tight group-hover:text-blue-900 transition-colors line-clamp-2">{post.title}</h4>
                     <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed">{post.excerpt}</p>
-                    <div className="mt-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">{post.date}</div>
+                    <div className="mt-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">{formatDate(post.date)}</div>
                  </div>
               </div>
             ))}
@@ -352,7 +359,7 @@ const PostDetailView = ({ post, onBack }: { post: Post, onBack: () => void }) =>
                 <div className="text-xs text-gray-400">Escritor & Estratega</div>
               </div>
             </div>
-            <div className="text-sm font-semibold text-gray-500">{post.date}</div>
+            <div className="text-sm font-semibold text-gray-500">{formatDate(post.date)}</div>
           </div>
         </div>
 

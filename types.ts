@@ -5,7 +5,7 @@ export interface Post {
   excerpt: string;
   content: string;
   author: string;
-  date: string;
+  date: Date;
   category: string;
   imageUrl: string;
 }

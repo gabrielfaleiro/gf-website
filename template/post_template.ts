@@ -5,7 +5,9 @@ import { Post, Category } from '../types';
  * INSTRUCCIONES:
  * 1. Copia este archivo a la carpeta /posts
  * 2. Renómbralo (ej: mi-nuevo-articulo.ts)
- * 3. Rellena los campos. El campo 'content' soporta Markdown (MDX).
+ * 3. Rellena los campos. 
+ *    - El campo 'content' soporta Markdown (MDX).
+ *    - El campo 'date' debe ser un objeto Date: new Date('AAAA-MM-DD').
  * 4. Regístralo en /posts/index.ts para que aparezca en la web
  */
 
@@ -25,7 +27,7 @@ Puedes añadir listas:
 Y bloques de código o imágenes adicionales.
   `,
   author: 'Gabriel Faleiro',
-  date: '20 Mayo, 2024',
+  date: new Date('2024-05-20'), 
   category: Category.TECNOLOGIA, 
   imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800',
 };
