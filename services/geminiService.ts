@@ -1,7 +1,8 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Always use a named parameter for apiKey and use process.env.API_KEY directly.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generatePostContent = async (topic: string) => {
   try {
@@ -23,6 +24,7 @@ export const generatePostContent = async (topic: string) => {
       },
     });
 
+    // The simplest way to get the text output is by accessing the .text property.
     if (response.text) {
       return JSON.parse(response.text.trim());
     }
