@@ -8,7 +8,7 @@ export const ContactForm: React.FC = () => (
         <h2 className="text-blue-900 font-bold uppercase tracking-widest text-sm mb-3">Contacto Directo</h2>
         <h3 className="text-5xl font-extrabold mb-8 leading-tight text-gray-900 tracking-tight">Hablemos de tu próximo <span className="text-blue-900">proyecto</span></h3>
         <p className="text-gray-600 text-lg mb-0 leading-relaxed max-w-md">
-          Si estás interesado en mis servicios o simplemente quieres conectar, elige tu vía preferida. Respondo en menos de 24 horas.
+          Si estás interesado en mis servicios, en acceso a mis recursos, o simplemente quieres conectar, elige tu vía preferida.
         </p>
       </div>
       <div className="space-y-6">
