@@ -4,7 +4,7 @@ import { View } from '../layout/Navigation';
 import { ContactForm } from './Contact';
 
 interface HomeProps {
-  setCurrentView: (v: View) => void;
+  setCurrentView: (v: View, elementId?: string) => void;
 }
 
 export const Home: React.FC<HomeProps> = ({ setCurrentView }) => (

@@ -1,11 +1,11 @@
 
 import React from 'react';
 
-export type View = 'home' | 'services' | 'products' | 'blog';
+export type View = 'home' | 'services' | 'blog';
 
 interface NavigationProps {
   currentView: View;
-  setCurrentView: (v: View) => void;
+  setCurrentView: (v: View, elementId?: string) => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ currentView, setCurrentView }) => (
@@ -18,7 +18,6 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setCurrentV
         <div className="hidden md:flex items-center space-x-10 text-sm font-semibold uppercase tracking-wider text-gray-500">
           <button onClick={() => setCurrentView('home')} className={`${currentView === 'home' ? 'text-blue-900 border-b-2 border-blue-900' : ''} hover:text-blue-900 transition-all pb-1`}>Inicio</button>
           <button onClick={() => setCurrentView('services')} className={`${currentView === 'services' ? 'text-blue-900 border-b-2 border-blue-900' : ''} hover:text-blue-900 transition-all pb-1`}>Servicios</button>
-          <button onClick={() => setCurrentView('products')} className={`${currentView === 'products' ? 'text-blue-900 border-b-2 border-blue-900' : ''} hover:text-blue-900 transition-all pb-1`}>Recursos</button>
           <button onClick={() => setCurrentView('blog')} className={`${currentView === 'blog' ? 'text-blue-900 border-b-2 border-blue-900' : ''} hover:text-blue-900 transition-all pb-1`}>Blog</button>
         </div>
       </div>

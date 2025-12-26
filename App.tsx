@@ -6,7 +6,6 @@ import { Navigation, View } from './components/layout/Navigation';
 import { Footer } from './components/layout/Footer';
 import { Home } from './components/sections/Home';
 import { Services } from './components/sections/Services';
-import { Products } from './components/sections/Products';
 import { Blog } from './components/sections/Blog';
 import { PostDetail } from './components/sections/PostDetail';
 
@@ -29,10 +28,21 @@ function App() {
     return ALL_POSTS.find(p => p.id === viewingPostId);
   }, [viewingPostId]);
 
-  const handleNavigate = (view: View) => {
+  const handleNavigate = (view: View, elementId?: string) => {
     setViewingPostId(null);
     setCurrentView(view);
-    window.scrollTo(0, 0);
+    
+    if (elementId) {
+      // Pequeño delay para asegurar que el componente se ha renderizado
+      setTimeout(() => {
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
   };
 
   return (
@@ -49,7 +59,6 @@ function App() {
           <>
             {currentView === 'home' && <Home setCurrentView={handleNavigate} />}
             {currentView === 'services' && <Services setCurrentView={handleNavigate} />}
-            {currentView === 'products' && <Products setCurrentView={handleNavigate} />}
             {currentView === 'blog' && (
               <Blog 
                 latestPosts={latestPosts} 

@@ -4,7 +4,7 @@ import { SERVICES } from '../../data/services';
 import { View } from '../layout/Navigation';
 
 interface ServicesProps {
-  setCurrentView: (v: View) => void;
+  setCurrentView: (v: View, elementId?: string) => void;
 }
 
 export const Services: React.FC<ServicesProps> = ({ setCurrentView }) => (
@@ -25,7 +25,10 @@ export const Services: React.FC<ServicesProps> = ({ setCurrentView }) => (
             </div>
             <h4 className="text-2xl font-bold text-gray-900 mb-4">{service.title}</h4>
             <p className="text-gray-500 leading-relaxed mb-8">{service.description}</p>
-            <button onClick={() => setCurrentView('home')} className="text-blue-900 font-bold flex items-center hover:translate-x-1 transition-all">
+            <button 
+              onClick={() => setCurrentView('home', 'contacto')} 
+              className="text-blue-900 font-bold flex items-center hover:translate-x-1 transition-all"
+            >
               Saber más <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </button>
           </div>

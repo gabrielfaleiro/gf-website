@@ -4,7 +4,7 @@ import { PRODUCTS } from '../../data/products';
 import { View } from '../layout/Navigation';
 
 interface ProductsProps {
-  setCurrentView: (v: View) => void;
+  setCurrentView: (v: View, elementId?: string) => void;
 }
 
 export const Products: React.FC<ProductsProps> = ({ setCurrentView }) => (
@@ -24,7 +24,7 @@ export const Products: React.FC<ProductsProps> = ({ setCurrentView }) => (
             <div className="p-10">
               <h4 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h4>
               <p className="text-gray-500 text-lg mb-8 leading-relaxed">{product.description}</p>
-              <button onClick={() => setCurrentView('home')} className="w-full bg-blue-900 text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-800 transition-all shadow-md">
+              <button onClick={() => setCurrentView('home', 'contacto')} className="w-full bg-blue-900 text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-800 transition-all shadow-md">
                 Solicitar Acceso
               </button>
             </div>
