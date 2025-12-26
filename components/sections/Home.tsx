@@ -10,7 +10,7 @@ interface HomeProps {
 export const Home: React.FC<HomeProps> = ({ setCurrentView }) => (
   <>
     <section className="pt-40 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-16">
         <div className="order-2 md:order-1 text-center md:text-left">
           <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tighter">
             Soluciones <span className="text-blue-900">Estratégicas</span> para marcas que inspiran.
@@ -19,14 +19,36 @@ export const Home: React.FC<HomeProps> = ({ setCurrentView }) => (
             Gabriel Faleiro. Consultor tecnológico, desarrollador y mentor. Transformo la visión de profesionales en impacto digital real.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-             <button onClick={() => setCurrentView('services')} className="bg-blue-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-800 transition-all shadow-lg">
+             <button onClick={() => setCurrentView('services')} className="bg-blue-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-800 transition-all shadow-lg hover:shadow-blue-200/50">
               Explorar Servicios
+            </button>
+            <button onClick={() => setCurrentView('blog')} className="bg-white text-gray-900 border-2 border-gray-100 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-50 transition-all">
+              Leer Blog
             </button>
           </div>
         </div>
         <div className="order-1 md:order-2 flex justify-center md:justify-end">
-          <div className="w-full max-w-md aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl transition-transform duration-700 hover:scale-[1.01] bg-blue-50">
-            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800" alt="Gabriel" className="w-full h-full object-cover" />
+          <div className="relative w-full max-w-md">
+            {/* Elementos decorativos de fondo */}
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-pulse"></div>
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-pulse delay-700"></div>
+            
+            <div className="relative aspect-square rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] transition-all duration-700 hover:scale-[1.02] bg-white ring-8 ring-blue-50/50">
+              <img 
+                src="/gabriel.jpg" 
+                alt="Gabriel Faleiro" 
+                className="w-full h-full object-cover"
+                loading="eager"
+                onError={(e) => {
+                  // Si falla la carga local, intentamos una ruta absoluta o mostramos el placeholder
+                  const target = e.target as HTMLImageElement;
+                  if (!target.dataset.triedFallback) {
+                    target.dataset.triedFallback = 'true';
+                    target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800';
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
