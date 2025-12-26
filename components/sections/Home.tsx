@@ -5,7 +5,7 @@ import { ContactForm } from './Contact';
 
 // En entornos de navegador directo, las rutas de assets se definen como strings
 // relativas al index.html o mediante URLs absolutas.
-const fotoGabriel = '/home/gabriel.jpg';
+const fotoGabriel = '/home/gabriel.png';
 
 interface HomeProps {
   setCurrentView: (v: View, elementId?: string) => void;
