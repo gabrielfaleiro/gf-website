@@ -5,7 +5,7 @@ import { ContactForm } from './Contact';
 
 // En entornos de navegador directo, las rutas de assets se definen como strings
 // relativas al index.html o mediante URLs absolutas.
-const fotoGabriel = 'gabriel.jpg';
+const fotoGabriel = '/home/gabriel.jpg';
 
 interface HomeProps {
   setCurrentView: (v: View, elementId?: string) => void;
@@ -47,14 +47,6 @@ export const Home: React.FC<HomeProps> = ({ setCurrentView }) => (
                 alt="Gabriel Faleiro" 
                 className="w-full h-full object-cover"
                 loading="eager"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (!target.dataset.triedFallback) {
-                    target.dataset.triedFallback = 'true';
-                    // Fallback a una imagen remota si la local falla o no existe
-                    target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800';
-                  }
-                }}
               />
             </div>
           </div>
