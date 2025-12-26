@@ -8,6 +8,7 @@ import { Home } from './components/sections/Home';
 import { Services } from './components/sections/Services';
 import { Blog } from './components/sections/Blog';
 import { PostDetail } from './components/sections/PostDetail';
+import { Resources } from './components/sections/Resources';
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home');
@@ -33,7 +34,6 @@ function App() {
     setCurrentView(view);
     
     if (elementId) {
-      // Pequeño delay para asegurar que el componente se ha renderizado
       setTimeout(() => {
         const element = document.getElementById(elementId);
         if (element) {
@@ -59,6 +59,7 @@ function App() {
           <>
             {currentView === 'home' && <Home setCurrentView={handleNavigate} />}
             {currentView === 'services' && <Services setCurrentView={handleNavigate} />}
+            {currentView === 'resources' && <Resources setCurrentView={handleNavigate} />}
             {currentView === 'blog' && (
               <Blog 
                 latestPosts={latestPosts} 

@@ -11,9 +11,9 @@ export const Services: React.FC<ServicesProps> = ({ setCurrentView }) => (
   <section className="pt-40 pb-24 px-4 sm:px-6 lg:px-8 min-h-[70vh]">
     <div className="max-w-7xl mx-auto">
       <div className="mb-16">
-        <h2 className="text-blue-900 font-bold uppercase tracking-widest text-sm mb-3">Expertise</h2>
-        <h3 className="text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">Servicios de Consultoría</h3>
-        <p className="text-xl text-gray-500 max-w-2xl leading-relaxed">Combinando visión estratégica con ejecución técnica impecable para transformar tu presencia en el mercado.</p>
+        <h2 className="text-blue-900 font-bold uppercase tracking-widest text-sm mb-3">Experiencia</h2>
+        <h3 className="text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">Servicios</h3>
+        <p className="text-xl text-gray-500 max-w-2xl leading-relaxed">Conecto la visión de profesionales con soluciones tecnológicas y estrategias de impacto real.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {SERVICES.map(service => (

@@ -57,7 +57,6 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
               </div>
               <div>
                 <div className="text-sm font-bold text-gray-900">{post.author}</div>
-                <div className="text-xs text-gray-400">Escritor & Estratega</div>
               </div>
             </div>
             <div className="text-sm font-semibold text-gray-500">{formatDate(post.date)}</div>

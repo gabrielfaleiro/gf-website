@@ -23,7 +23,7 @@ export interface Service {
   icon: string;
 }
 
-export interface Product {
+export interface Resource {
   id: string;
   name: string;
   description: string;

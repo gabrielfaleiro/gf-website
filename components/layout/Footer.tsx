@@ -9,7 +9,6 @@ export const Footer: React.FC = () => (
       </div>
       <div className="flex gap-8 font-bold text-gray-600 text-sm">
         <a href="https://www.linkedin.com/in/gabrielfaleiro/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-900 transition-colors">LinkedIn</a>
-        <a href="https://wa.me/34686048730" target="_blank" rel="noopener noreferrer" className="hover:text-blue-900 transition-colors">WhatsApp</a>
         <a href="https://github.com/gabrielfaleiro" target="_blank" rel="noopener noreferrer" className="hover:text-blue-900 transition-colors">GitHub</a>
       </div>
     </div>
