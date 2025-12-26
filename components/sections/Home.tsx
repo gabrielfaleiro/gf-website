@@ -27,7 +27,10 @@ export const Home: React.FC<HomeProps> = ({ setCurrentView }) => (
              <button onClick={() => setCurrentView('services')} className="bg-blue-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-800 transition-all shadow-lg hover:shadow-blue-200/50">
               Explorar Servicios
             </button>
-            <button onClick={() => setCurrentView('blog')} className="bg-white text-gray-900 border-2 border-gray-100 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-50 transition-all">
+            <button 
+              onClick={() => setCurrentView('blog')} 
+              className="bg-white text-blue-900 border border-gray-100 px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl hover:-translate-y-1 transition-all shadow-lg"
+            >
               Leer Blog
             </button>
           </div>
