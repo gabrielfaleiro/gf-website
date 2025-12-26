@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Post } from '../../types';
 
 interface PostDetailProps {
@@ -67,8 +68,9 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
           <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
         </div>
 
-        <div className="prose prose-lg prose-blue max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:leading-relaxed prose-p:text-gray-600 prose-blockquote:border-l-4 prose-blockquote:border-blue-900 prose-blockquote:bg-blue-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:italic">
-          <ReactMarkdown>{post.content}</ReactMarkdown>
+        {/* Contenedor con overflow-x-auto para que las tablas no rompan el layout en móviles */}
+        <div className="prose prose-lg prose-blue max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:leading-relaxed prose-p:text-gray-600 prose-blockquote:border-l-4 prose-blockquote:border-blue-900 prose-blockquote:bg-blue-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:italic overflow-x-auto">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
 
         {/* Sección de compartir en redes sociales */}
