@@ -3,6 +3,10 @@ import React from 'react';
 import { View } from '../layout/Navigation';
 import { ContactForm } from './Contact';
 
+// En entornos de navegador directo, las rutas de assets se definen como strings
+// relativas al index.html o mediante URLs absolutas.
+const fotoGabriel = 'gabriel.jpg';
+
 interface HomeProps {
   setCurrentView: (v: View, elementId?: string) => void;
 }
@@ -35,15 +39,15 @@ export const Home: React.FC<HomeProps> = ({ setCurrentView }) => (
             
             <div className="relative aspect-square rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] transition-all duration-700 hover:scale-[1.02] bg-white ring-8 ring-blue-50/50">
               <img 
-                src="/gabriel.jpg" 
+                src={fotoGabriel} 
                 alt="Gabriel Faleiro" 
                 className="w-full h-full object-cover"
                 loading="eager"
                 onError={(e) => {
-                  // Si falla la carga local, intentamos una ruta absoluta o mostramos el placeholder
                   const target = e.target as HTMLImageElement;
                   if (!target.dataset.triedFallback) {
                     target.dataset.triedFallback = 'true';
+                    // Fallback a una imagen remota si la local falla o no existe
                     target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800';
                   }
                 }}
@@ -58,7 +62,7 @@ export const Home: React.FC<HomeProps> = ({ setCurrentView }) => (
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row gap-12 items-center">
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-blue-900 font-bold uppercase tracking-widest text-xs mb-3">En los auriculares</h2>
+            <h2 className="text-blue-900 font-bold uppercase tracking-widest text-sm mb-3">En los auriculares</h2>
             <h3 className="text-3xl font-extrabold text-gray-900 mb-6 tracking-tight">Escucha mi Podcast</h3>
             <p className="text-gray-500 text-lg leading-relaxed mb-8">
               Reflexiones semanales sobre tecnología, marca personal y el futuro del trabajo digital. Suscríbete para no perderte ningún capítulo.
