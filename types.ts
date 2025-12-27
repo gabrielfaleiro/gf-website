@@ -21,6 +21,7 @@ export interface Service {
   title: string;
   description: string;
   icon: string;
+  explanation?: string; // Campo para información extendida
 }
 
 export interface Resource {

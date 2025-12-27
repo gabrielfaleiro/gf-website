@@ -34,7 +34,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setCurrentV
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-10 text-sm font-semibold uppercase tracking-wider text-gray-500">
+          <div className="hidden md:flex items-center space-x-8 text-sm font-semibold uppercase tracking-wider text-gray-500">
             {navLinks.map((link) => (
               <button
                 key={link.view}
@@ -44,6 +44,12 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setCurrentV
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={() => handleNavigation('home', 'contacto')}
+              className="bg-blue-900 text-white px-6 py-2.5 rounded-full font-bold hover:bg-blue-800 transition-all shadow-md hover:shadow-blue-900/20 active:scale-95 ml-4"
+            >
+              Contactar
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -80,6 +86,12 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setCurrentV
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={() => handleNavigation('home', 'contacto')}
+              className="bg-blue-900 text-white px-8 py-4 rounded-2xl font-bold text-center text-lg shadow-lg"
+            >
+              Contactar
+            </button>
           </div>
         </div>
       )}
