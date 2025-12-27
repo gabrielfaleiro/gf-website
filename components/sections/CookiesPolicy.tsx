@@ -14,7 +14,6 @@ export const CookiesPolicy: React.FC<CookiesPolicyProps> = ({
   onUpdateConsent
 }) => {
   const [tempSettings, setTempSettings] = useState<CookieSettings>({
-    essential: true,
     analysis: true
   });
 
@@ -26,7 +25,6 @@ export const CookiesPolicy: React.FC<CookiesPolicyProps> = ({
   }, [currentConsent]);
 
   const handleToggle = (key: keyof CookieSettings) => {
-    if (key === 'essential') return;
     const newSettings = { ...tempSettings, [key]: !tempSettings[key] };
     setTempSettings(newSettings);
     onUpdateConsent(newSettings);
@@ -54,7 +52,7 @@ export const CookiesPolicy: React.FC<CookiesPolicyProps> = ({
             </div>
             
             <div className="p-8 space-y-8">
-              {/* Essential */}
+              {/* Essential - Manteniendo el Front Visual */}
               <div className="flex items-center justify-between gap-6 pb-6 border-b border-gray-50">
                 <div>
                   <h4 className="font-bold text-gray-900 text-sm uppercase tracking-widest mb-1">Cookies Necesarias (Técnicas)</h4>

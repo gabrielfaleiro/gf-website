@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 
 export interface CookieSettings {
-  essential: boolean;
   analysis: boolean;
 }
 
@@ -21,7 +20,6 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
 }) => {
   const [view, setView] = useState<'banner' | 'settings'>(showSettingsOnly ? 'settings' : 'banner');
   const [settings, setSettings] = useState<CookieSettings>(initialSettings || {
-    essential: true,
     analysis: true
   });
 
@@ -31,13 +29,13 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
   };
 
   const handleAcceptAll = () => {
-    const allOn = { essential: true, analysis: true };
+    const allOn = { analysis: true };
     onAccept(allOn);
     if (onCloseSettings) onCloseSettings();
   };
 
   const handleEssentialOnly = () => {
-    const essentialOnly = { essential: true, analysis: false };
+    const essentialOnly = { analysis: false };
     onAccept(essentialOnly);
     if (onCloseSettings) onCloseSettings();
   };
@@ -57,6 +55,7 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
             )}
           </div>
           <div className="p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+            {/* Fila informativa de Cookies Necesarias - Manteniendo el Front */}
             <div className="flex items-start justify-between gap-4 pb-4 border-b border-gray-50">
               <div>
                 <h4 className="font-bold text-gray-900 text-sm uppercase tracking-widest mb-1">Cookies Necesarias</h4>
