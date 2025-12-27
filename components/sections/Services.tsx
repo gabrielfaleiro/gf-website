@@ -1,5 +1,7 @@
 
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { SERVICES } from '../../data/services';
 import { View } from '../layout/Navigation';
 import { Service } from '../../types';
@@ -70,13 +72,16 @@ export const Services: React.FC<ServicesProps> = ({ setCurrentView }) => {
               {selectedService.title}
             </h3>
             
-            <div className="prose prose-xl prose-blue text-gray-600 leading-relaxed mb-16">
-              <p className="font-medium text-gray-900 text-2xl mb-6">
+            <div className="mb-16">
+              <p className="font-medium text-gray-900 text-2xl mb-8 leading-snug">
                 {selectedService.description}
               </p>
-              <p>
-                {selectedService.explanation}
-              </p>
+              
+              <div className="prose prose-lg prose-blue max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:leading-relaxed prose-p:text-gray-600 prose-blockquote:border-l-4 prose-blockquote:border-blue-900 prose-blockquote:bg-blue-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:italic overflow-x-auto">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {selectedService.explanation || ''}
+                </ReactMarkdown>
+              </div>
             </div>
 
             <div className="p-10 md:p-12 bg-blue-50 rounded-[3rem] border border-blue-100 text-center md:text-left relative overflow-hidden">
