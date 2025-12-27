@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 
-export type View = 'home' | 'services' | 'resources' | 'blog';
+export type View = 'home' | 'services' | 'resources' | 'blog' | 'privacy' | 'legal' | 'cookies';
 
 interface NavigationProps {
   currentView: View;

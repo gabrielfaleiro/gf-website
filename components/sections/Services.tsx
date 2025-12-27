@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { SERVICES } from '../../data/services';
@@ -14,6 +14,13 @@ export const Services: React.FC<ServicesProps> = ({ setCurrentView }) => {
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
 
   const selectedService = SERVICES.find(s => s.id === selectedServiceId);
+
+  // Reiniciar el scroll al principio cuando se selecciona un servicio
+  useEffect(() => {
+    if (selectedServiceId) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [selectedServiceId]);
 
   const handleBack = () => {
     setSelectedServiceId(null);

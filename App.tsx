@@ -9,6 +9,9 @@ import { Services } from './components/sections/Services';
 import { Blog } from './components/sections/Blog';
 import { PostDetail } from './components/sections/PostDetail';
 import { Resources } from './components/sections/Resources';
+import { PrivacyPolicy } from './components/sections/PrivacyPolicy';
+import { LegalNotice } from './components/sections/LegalNotice';
+import { CookiesPolicy } from './components/sections/CookiesPolicy';
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('home');
@@ -46,10 +49,10 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Navigation currentView={currentView} setCurrentView={handleNavigate} />
       
-      <main>
+      <main className="flex-grow">
         {selectedPost ? (
           <PostDetail 
             post={selectedPost} 
@@ -60,6 +63,9 @@ function App() {
             {currentView === 'home' && <Home setCurrentView={handleNavigate} />}
             {currentView === 'services' && <Services setCurrentView={handleNavigate} />}
             {currentView === 'resources' && <Resources setCurrentView={handleNavigate} />}
+            {currentView === 'privacy' && <PrivacyPolicy />}
+            {currentView === 'legal' && <LegalNotice />}
+            {currentView === 'cookies' && <CookiesPolicy />}
             {currentView === 'blog' && (
               <Blog 
                 latestPosts={latestPosts} 
@@ -73,7 +79,7 @@ function App() {
         )}
       </main>
 
-      <Footer />
+      <Footer setCurrentView={handleNavigate} />
     </div>
   );
 }
