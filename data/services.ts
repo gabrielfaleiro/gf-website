@@ -6,7 +6,7 @@ export const SERVICES: Service[] = [
     id: 's1',
     title: 'Consultoría de Soluciones',
     description: 'Transformo ideas complejas en productos tangibles mediante un análisis riguroso de viabilidad técnica y el diseño de arquitecturas escalables.',
-    icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04M12 21.48V12',
+    icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
     explanation: `
 **Análisis de Viabilidad Técnica**: Evaluación profunda de tecnologías emergentes para asegurar que la solución propuesta es ejecutable, rentable y sostenible a largo plazo.
 
@@ -23,7 +23,7 @@ export const SERVICES: Service[] = [
     id: 's2',
     title: 'CTO Externo',
     description: 'Ofrezco liderazgo tecnológico estratégico a tiempo parcial para empresas y startups que necesitan una dirección técnica de alto nivel sin los costes de una estructura fija, asegurando que la tecnología sea siempre un motor de crecimiento y no un cuello de botella.',
-    icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+    icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',
     explanation: `
 **Liderazgo y Supervisión de Ingeniería**: Dirección estratégica de equipos multidisciplinares, asegurando la calidad del desarrollo, el cumplimiento de plazos y la alineación con los objetivos de negocio.
 
@@ -40,7 +40,7 @@ export const SERVICES: Service[] = [
     id: 's3',
     title: 'Auditoría de Tech Due Diligence (Auditoría Técnica)',
     description: 'Proporciono un análisis crítico y objetivo de los activos tecnológicos de una compañía para inversores, asegurando que la tecnología sea una base sólida para el crecimiento y no un riesgo oculto para la inversión.',
-    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+    icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
     explanation: `
 **Evaluación de la Arquitectura y Escalabilidad**: Análisis profundo de la infraestructura técnica (Software, IIoT, Cloud) para garantizar que el sistema puede soportar el crecimiento proyectado por el negocio.
 
@@ -57,7 +57,7 @@ export const SERVICES: Service[] = [
     id: 's4',
     title: 'Servicios de Prototipado',
     description: 'Transformo conceptos abstractos en activos tangibles mediante el desarrollo de prototipos funcionales y MVPs que permiten validar la tecnología y la experiencia de usuario antes de la industrialización.',
-    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+    icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
     explanation: `
 **Desarrollo de MVPs Tecnológicos**: Construcción de productos mínimos viables que integran hardware y software para validar hipótesis de negocio en entornos reales.
 
@@ -74,7 +74,7 @@ export const SERVICES: Service[] = [
     id: 's5',
     title: 'Sprint de Ideación de Fin de Semana',
     description: 'Sesiones intensivas de co-creación diseñadas para acelerar la transformación de una oportunidad de mercado en un concepto de producto validado y listo para el desarrollo.',
-    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+    icon: 'M13 10V3L4 14h7v7l9-11h-7z',
     explanation: `
 **Metodología de Aceleración**: Aplicación de marcos de trabajo como Design Thinking y Lean Startup para definir el modelo de negocio y las hipótesis críticas en un tiempo récord.
 
