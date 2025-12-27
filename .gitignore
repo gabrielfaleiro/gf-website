@@ -25,5 +25,3 @@ dist-ssr
 
 vite-env.d.ts
 package-lock.json
-
-public_bk*
