@@ -1,13 +1,9 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Post } from '../../types';
-
-interface PostDetailProps {
-  post: Post;
-  onBack: () => void;
-}
+import { ALL_POSTS } from '../../posts/index';
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('es-ES', { 
@@ -17,12 +13,22 @@ const formatDate = (date: Date) => {
   });
 };
 
-export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
+export const PostDetail: React.FC = () => {
+  const { postId, lang = 'es' } = useParams<{ postId: string, lang: string }>();
+  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
+  const post = useMemo(() => {
+    return ALL_POSTS.find(p => p.id === postId);
+  }, [postId]);
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    if (!post) {
+      navigate(`/${lang}/blog`);
+    }
+  }, [post, navigate, lang]);
+
+  if (!post) return null;
 
   const shareUrl = window.location.href;
   const shareText = `He leído este interesante artículo: ${post.title}`;
@@ -36,15 +42,15 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
   return (
     <article className="pt-40 pb-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <button 
-          onClick={onBack}
+        <Link 
+          to={`/${lang}/blog`}
           className="mb-12 flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-blue-900 transition-colors group"
         >
           <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
           </svg>
           Volver al Blog
-        </button>
+        </Link>
 
         <div className="mb-12">
           <span className="text-blue-900 text-xs font-black uppercase tracking-widest mb-4 block">{post.category}</span>
@@ -68,12 +74,10 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
           <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
         </div>
 
-        {/* Contenedor con overflow-x-auto para que las tablas no rompan el layout en móviles */}
         <div className="prose prose-lg prose-blue max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:leading-relaxed prose-p:text-gray-600 prose-blockquote:border-l-4 prose-blockquote:border-blue-900 prose-blockquote:bg-blue-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:italic overflow-x-auto">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
 
-        {/* Sección de compartir en redes sociales */}
         <div className="mt-20 pt-12 border-t border-gray-100">
           <div className="text-center mb-8">
             <h4 className="text-lg font-black uppercase tracking-widest text-gray-900">Comparte este artículo</h4>
@@ -81,7 +85,6 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
           </div>
           
           <div className="flex flex-wrap justify-center gap-4">
-            {/* LinkedIn */}
             <a 
               href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
               target="_blank"
@@ -92,7 +95,6 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
               LinkedIn
             </a>
 
-            {/* Twitter / X */}
             <a 
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
               target="_blank"
@@ -103,7 +105,6 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
               Twitter
             </a>
 
-            {/* WhatsApp */}
             <a 
               href={`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`}
               target="_blank"
@@ -114,13 +115,12 @@ export const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
               WhatsApp
             </a>
 
-            {/* Copiar enlace */}
             <button 
               onClick={handleCopyLink}
               className={`flex items-center gap-3 px-6 py-3 rounded-2xl border transition-all font-bold text-sm ${copied ? 'bg-blue-900 border-blue-900 text-white' : 'bg-slate-50 border-slate-100 text-gray-700 hover:bg-slate-200'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002 2h-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
               </svg>
               {copied ? '¡Copiado!' : 'Copiar enlace'}
             </button>

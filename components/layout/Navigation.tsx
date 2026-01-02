@@ -1,51 +1,57 @@
 
 import React, { useState } from 'react';
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
 
-export type View = 'home' | 'services' | 'resources' | 'blog' | 'privacy' | 'legal' | 'cookies';
-
-interface NavigationProps {
-  currentView: View;
-  setCurrentView: (v: View, elementId?: string) => void;
-}
-
-export const Navigation: React.FC<NavigationProps> = ({ currentView, setCurrentView }) => {
+export const Navigation: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { lang = 'es' } = useParams<{ lang: string }>();
+  const navigate = useNavigate();
 
-  const handleNavigation = (view: View, elementId?: string) => {
-    setCurrentView(view, elementId);
+  const handleContact = () => {
+    navigate(`/${lang}`);
+    setTimeout(() => {
+      const element = document.getElementById('contacto');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
     setIsMenuOpen(false);
   };
 
-  const navLinks: { label: string; view: View }[] = [
-    { label: 'Inicio', view: 'home' },
-    { label: 'Servicios', view: 'services' },
-    { label: 'Recursos', view: 'resources' },
-    { label: 'Blog', view: 'blog' }
+  const navLinks = [
+    { label: 'Inicio', path: `/${lang}` },
+    { label: 'Servicios', path: `/${lang}/servicios` },
+    { label: 'Recursos', path: `/${lang}/recursos` },
+    { label: 'Blog', path: `/${lang}/blog` }
   ];
 
   return (
     <nav className="glass-nav border-b fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
-          <div className="flex items-center cursor-pointer" onClick={() => handleNavigation('home')}>
+          <Link to={`/${lang}`} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
             <span className="text-xl font-extrabold tracking-tight text-gray-900 uppercase">
               Gabriel Faleiro
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8 text-sm font-semibold uppercase tracking-wider text-gray-500">
             {navLinks.map((link) => (
-              <button
-                key={link.view}
-                onClick={() => handleNavigation(link.view)}
-                className={`${currentView === link.view ? 'text-blue-900 border-b-2 border-blue-900' : ''} hover:text-blue-900 transition-all pb-1`}
+              <NavLink
+                key={link.path}
+                to={link.path}
+                end={link.path === `/${lang}`}
+                className={({ isActive }) => 
+                  `${isActive ? 'text-blue-900 border-b-2 border-blue-900' : ''} hover:text-blue-900 transition-all pb-1`
+                }
               >
                 {link.label}
-              </button>
+              </NavLink>
             ))}
+            
             <button
-              onClick={() => handleNavigation('home', 'contacto')}
+              onClick={handleContact}
               className="bg-blue-900 text-white px-6 py-2.5 rounded-full font-bold hover:bg-blue-800 transition-all shadow-md hover:shadow-blue-900/20 active:scale-95 ml-4"
             >
               Contactar
@@ -76,18 +82,23 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setCurrentV
         <div className="md:hidden absolute top-20 left-0 w-full bg-white/95 backdrop-blur-xl border-b shadow-xl transition-all duration-300">
           <div className="flex flex-col p-6 space-y-6">
             {navLinks.map((link) => (
-              <button
-                key={link.view}
-                onClick={() => handleNavigation(link.view)}
-                className={`text-left text-xl font-bold uppercase tracking-widest ${
-                  currentView === link.view ? 'text-blue-900' : 'text-gray-500'
-                }`}
+              <NavLink
+                key={link.path}
+                to={link.path}
+                end={link.path === `/${lang}`}
+                onClick={() => setIsMenuOpen(false)}
+                className={({ isActive }) => 
+                  `text-left text-xl font-bold uppercase tracking-widest ${
+                    isActive ? 'text-blue-900' : 'text-gray-500'
+                  }`
+                }
               >
                 {link.label}
-              </button>
+              </NavLink>
             ))}
+            
             <button
-              onClick={() => handleNavigation('home', 'contacto')}
+              onClick={handleContact}
               className="bg-blue-900 text-white px-8 py-4 rounded-2xl font-bold text-center text-lg shadow-lg"
             >
               Contactar

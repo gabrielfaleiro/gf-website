@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Post } from '../../types';
+import { Link, useParams } from 'react-router-dom';
 
 interface PostCardProps {
   post: Post;
-  onClick?: (id: string) => void;
 }
 
 const formatDate = (date: Date) => {
@@ -15,11 +15,13 @@ const formatDate = (date: Date) => {
   });
 };
 
-export const PostCard: React.FC<PostCardProps> = ({ post, onClick }) => {
+export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+  const { lang = 'es' } = useParams<{ lang: string }>();
+
   return (
-    <article 
-      className="group bg-white rounded-3xl overflow-hidden border border-transparent hover:border-blue-100 transition-all duration-300 hover:shadow-xl cursor-pointer"
-      onClick={() => onClick?.(post.id)}
+    <Link 
+      to={`/${lang}/blog/${post.id}`}
+      className="group bg-white rounded-3xl overflow-hidden border border-transparent hover:border-blue-100 transition-all duration-300 hover:shadow-xl block"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <img 
@@ -49,6 +51,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onClick }) => {
           <span className="text-[11px] font-semibold text-gray-400">{formatDate(post.date)}</span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 };
