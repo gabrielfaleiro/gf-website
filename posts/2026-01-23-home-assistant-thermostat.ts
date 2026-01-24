@@ -15,7 +15,13 @@ No me convencía pagar ese precio, así que decidí crear mi propia solución DI
 
 Para este proyecto, he huido de las nubes de terceros y las suscripciones. La arquitectura se basa en la reutilización de equipos antiguos y componentes muy económicos.
 
-### 1. El Cerebro: Home Assistant en hardware reciclado
+### 1. El Calefactor
+
+Cualquiera vale. Los calefactores tienen una interfaz muy simple para activar la calefacción. El mío tiene dos terminales marcados como "24V" y "RT". Cuando están conectados, se enciende la calefacción. Medí la corriente que se genera cuando se conectan los dos bornes con un multímetro: 24mA. Ya sabemos las condiciones de operación de la señal a controlar.
+
+Debido a que se van a conectar dos terminales a 24V, y el módulo de control trabaja normalmente a 3.3V o 5V, además de que la referencia de tensión es distinta, debemos desacoplar los circuitos. Para ello utilizaremos un optoacoplador. Lo explico más adelante.
+
+### 2. El Cerebro: Home Assistant en hardware reciclado
 En lugar de comprar una [Raspberry Pi](https://amzn.to/3M4sU35), he rescatado un **ordenador portátil antiguo** dedicado a ejecutar [**Home Assistant**](https://www.home-assistant.io/). Este es un sistema de automatización de código abierto muy potente y popular en la comunidad. Existen otras alternativas como OpenHAB o Domoticz, pero Home Assistant tiene una interfaz web muy intuitiva, y además de integrar con muchos dispositivos y servicios, integra ESPHome de forma nativa.
 
 ![Home Assistant Web](/posts/2026-01-23-home-assistant-thermostat-1.png)
@@ -29,22 +35,22 @@ Además, no puedo olvidarme de la aplicación móvil [**Home Assistant para Andr
 Así de bien se ve:
 ![Home Assistant Android](/posts/2026-01-23-home-assistant-thermostat-android.jpg)
 
-### 2. La Seguridad: Acceso remoto con Tailscale
+### 3. La Seguridad: Acceso remoto con Tailscale
 Uno de los mayores miedos al domotizar una casa es la seguridad. ¿Cómo controlo la calefacción desde la calle sin abrir puertos en el router y exponer mi red a hackers?
 
 La respuesta es [**Tailscale**](https://tailscale.com/). He instalado esta herramienta en el portátil y en mis móviles. Crea una red privada virtual (VPN) que me permite conectar mis dispositivos de forma segura y encriptada, como si estuvieran todos en la misma habitación, sin configuraciones complejas de red.
 
-### 3. El Hardware: ESP8266
+### 4. El Hardware: ESP8266
 Para la parte física, he utilizado dos módulos [**ESP8266**](https://amzn.to/4qEZms3), unos microcontroladores con WiFi que cuestan apenas unos euros. La configuración es la siguiente:
 
 * **Módulo A (Sensor):** Conectado a un sensor [**DHT11**](https://amzn.to/4r4nxzI). Este se encarga de leer la temperatura y humedad de la habitación y enviarla al servidor.
 
-* **Módulo B (Actuador):** Controla un [**optoacoplador**](https://amzn.to/4sUzBoY). Este componente es clave: aísla eléctricamente el circuito del microcontrolador del circuito de la caldera. Se conecta a los terminales del calefactor para encenderlo o apagarlo según la lógica que definamos.
+* **Módulo B (Actuador):** Controla un [**optoacoplador**](https://amzn.to/4sUzBoY). Este componente es clave: aísla eléctricamente el circuito del microcontrolador del circuito de la caldera. Se conecta a los terminales del calefactor para encenderlo o apagarlo según la lógica que definamos. Yo utilicé el [integrado PC817](https://amzn.to/3LSKbfp), un foto transistor, y lo soldé directamente a una PCB de prototipado con el módulo ESP8266. Recuerda controlar la corriente de activación del diodo para no quemarlo, y que los terminales de entrada y salida tienen polaridad. Dimensioné la resistencia en serie para introducir una corriente de 20mA, más que suficiente. Un [relé](https://amzn.to/45vGIu5) habría funcionado igual, pero al ser actuación mecánica tiene menor vida útil.
 
 Esta es mi versión del módulo actuador:
 ![Modulo Actuador](/posts/2026-01-23-home-assistant-thermostat-modulo-actuador.jpg)
 
-### 4. El Software: La magia de ESPHome
+### 5. El Software: La magia de ESPHome
 Aquí es donde todo cobra sentido. Antiguamente, programar estos chips requería código C++ y entornos complejos. Hoy usamos [**ESPHome**](https://esphome.io/). 
 
 ESPHome es un firmware diseñado para placas de desarrollo de Espressif (como el ESP32 y el ESP8266). Lo genial es su historia: funcionaba tan bien que los desarrolladores de Home Assistant (Nabu Casa) [compraron en 2021 el proyecto](https://www.home-assistant.io/blog/2021/03/18/nabu-casa-has-acquired-esphome/) y lo integraron nativamente en la plataforma. Para trabajar con ESP Home desde Home Assistant es necesario instalar el Add-on [**ESPHome Device Builder**](https://esphome.io/guides/getting_started_hassio/).
@@ -326,7 +332,7 @@ Este código es diferente al del sensor. Aquí no solo leemos datos, tomamos dec
 
 5. **Intervalo de Refresco** Cada 10 minutos, el sistema "revisa" que todo esté bien. Este es el parámetro keep-alive que mantiene el módulo activo y comprobando periódicamente que el modo de operación del control.
 
-### 5. Configuraciones finales
+### 6. Configuraciones finales
 
 El dashboard de Home Automation lo he creado manualmente con el siguiente fichero de configuración:
 
