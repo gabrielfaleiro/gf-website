@@ -51,6 +51,9 @@ export const LegalNotice: React.FC = () => {
           <p>
             En el caso de que en la página web se dispusiesen enlaces o hipervínculos hacía otros sitios de Internet, el titular no ejercerá ningún tipo de control sobre dichos sitios y contenidos. En ningún caso asumirá responsabilidad alguna por los contenidos de algún enlace perteneciente a un sitio web ajeno.
           </p>
+          <p> 
+            En calidad de Afiliado de Amazon, obtengo ingresos por las compras adscritas que cumplen los requisitos aplicables.
+          </p>
 
           <h3>4. Legislación Aplicable y Jurisdicción</h3>
           <p>

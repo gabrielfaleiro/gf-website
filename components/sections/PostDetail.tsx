@@ -3,6 +3,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ALL_POSTS } from '../../posts/index';
 
 const formatDate = (date: Date) => {
@@ -11,6 +13,50 @@ const formatDate = (date: Date) => {
     month: 'long', 
     year: 'numeric' 
   });
+};
+
+// Componente para bloques de código con botón de copiar
+const CodeBlock = ({ language, children }: { language: string; children: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(children);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="relative group">
+      <button
+        onClick={handleCopy}
+        className="absolute top-3 right-3 p-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-10"
+        title="Copiar código"
+      >
+        {copied ? (
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+          </svg>
+        ) : (
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        )}
+      </button>
+      <SyntaxHighlighter
+        style={oneDark}
+        language={language}
+        PreTag="div"
+        customStyle={{
+          borderRadius: '0.4rem',
+          fontSize: '0.875rem',
+          margin: '1.5rem 0',
+          paddingTop: '0.7rem',
+        }}
+      >
+        {children}
+      </SyntaxHighlighter>
+    </div>
+  );
 };
 
 export const PostDetail: React.FC = () => {
@@ -75,7 +121,26 @@ export const PostDetail: React.FC = () => {
         </div>
 
         <div className="prose prose-lg prose-blue max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:leading-relaxed prose-p:text-gray-600 prose-blockquote:border-l-4 prose-blockquote:border-blue-900 prose-blockquote:bg-blue-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:italic overflow-x-auto">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]}
+            components={{
+              code({ node, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || '');
+                const isInline = !match && !className;
+                return !isInline && match ? (
+                  <CodeBlock language={match[1]}>
+                    {String(children).replace(/\n$/, '')}
+                  </CodeBlock>
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              }
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
 
         <div className="mt-20 pt-12 border-t border-gray-100">

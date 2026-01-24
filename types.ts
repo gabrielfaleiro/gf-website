@@ -14,6 +14,7 @@ export enum Category {
   TECNOLOGIA = 'Tecnología',
   INNOVACION = 'Innovación',
   NEGOCIOS = 'Negocios',
+  PROTOTRICKS = 'ProtoTricks',
 }
 
 export interface Service {
