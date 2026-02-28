@@ -2,9 +2,11 @@ import { Post, Category } from '../types';
 
 export const post: Post = {
   id: 'termostato-diy-home-assistant',
-  title: 'ProtoTricks: Crea tu propio Termostato Inteligente con Home Assistant',
-  excerpt: '¿Por qué gastar más de 100€ cuando la electrónica es simple? Descubre cómo automaticé mi calefacción reciclando hardware y usando ESPHome con Home Assistant.',
-  content: `
+  title_es: 'ProtoTricks: Crea tu propio Termostato Inteligente con Home Assistant',
+  title_en: 'ProtoTricks: Build Your Own Smart Thermostat with Home Assistant',
+  excerpt_es: '¿Por qué gastar más de 100€ cuando la electrónica es simple? Descubre cómo automaticé mi calefacción reciclando hardware y usando ESPHome con Home Assistant.',
+  excerpt_en: 'Why spend over €100 when the electronics are simple? Discover how I automated my heating by recycling hardware and using ESPHome with Home Assistant.',
+  content_es: `
 ## El problema: La "tasa" de lo inteligente
 
 Si has mirado el mercado recientemente, sabrás que un termostato inteligente comercial puede costar fácilmente **100€ o más**. Sin embargo, si analizas lo que hay dentro de esa carcasa de plástico brillante, la electrónica es sorprendentemente simple: un sensor de temperatura, un relé y conexión WiFi.
@@ -314,7 +316,7 @@ Este código es diferente al del sensor. Aquí no solo leemos datos, tomamos dec
 
 * Temperatura Objetivo: Un slider para elegir los grados deseados. Al definirlos aquí, si Home Assistant se reinicia, el chip recuerda la temperatura que le pusiste.
 
-2. **El Sensor "Fantasma"** (platform: homeassistant) Aquí ocurre la magia. Este chip no tiene sensor de temperatura. ¿De dónde saca el dato? Usa la plataforma homeassistant para "importar" el valor del sensor DHT11 que instalamos en la otra habitación.
+2. **El Sensor** Aquí ocurre la magia. ¿De dónde saca el dato? Usa la plataforma homeassistant para "importar" el valor del sensor DHT11 que instalamos en la otra habitación.
 
 * El flujo es: Módulo Sensor -> WiFi -> Home Assistant -> WiFi -> Módulo Actuador.
 
@@ -387,6 +389,378 @@ entities:
 
 **¿Te animas a "cacharrear"?**
 Con una inversión mínima y una tarde de configuración, tienes un sistema que rivaliza con los de gama alta. Si tienes dudas sobre el esquema de conexión o la configuración YAML, escríbeme y lo vemos.
+`,
+  content_en: `
+## The Problem: The "Fee" of Being Smart
+
+If you've looked at the market recently, you know that a commercial smart thermostat can easily cost **€100 or more**. However, if you analyze what's inside that shiny plastic case, the electronics are surprisingly simple: a temperature sensor, a relay and WiFi connection.
+
+I wasn't convinced to pay that price, so I decided to create my own DIY solution not only to save money, but to enjoy the **creative process** and have full control over my devices and data.
+
+## The Solution: Recycling and Open Source
+
+For this project, I have steered clear of third-party clouds and subscriptions. The architecture is based on reusing old equipment and very inexpensive components.
+
+### 1. The Heater
+
+Any heater will do. Heaters have a very simple interface to activate heating. Mine has two terminals marked "24V" and "RT". When they are connected, the heating turns on. I measured the current that flows when the two poles are connected with a multimeter: 24 mA. Now we know the operating conditions of the signal to control.
+
+Because we are going to connect two 24 V terminals and the control module normally runs at 3.3 V or 5 V—and the voltage references are different—we must decouple the circuits. For that we will use an optocoupler. I'll explain it later.
+
+### 2. The Brain: Home Assistant on recycled hardware
+
+Instead of buying a [Raspberry Pi](https://amzn.to/3M4sU35), I rescued an **old laptop** dedicated to running [**Home Assistant**](https://www.home-assistant.io/). This is a very powerful and popular open‑source home automation system in the community. There are other alternatives such as OpenHAB or Domoticz, but Home Assistant has a very intuitive web interface, and in addition to integrating with many devices and services it integrates ESPHome natively.
+
+![Home Assistant Web](/posts/2026-01-23-home-assistant-thermostat-1.png)
+
+Using an old laptop gives me a built-in battery that acts as a homemade UPS (Uninterruptible Power Supply) and gives use to a laptop that would have ended up in the trash. A downside is that a Raspberry Pi probably consumes less than my laptop, but for this project it's enough.
+
+If you don't have much experience with Linux systems, I recommend buying a [Raspberry Pi](https://amzn.to/3M4sU35) because installing the Home Assistant operating system is [super easy](https://www.home-assistant.io/installation/raspberrypi) on that platform.
+
+Also, I can't forget the mobile app [**Home Assistant for Android**](https://play.google.com/store/apps/details?id=io.homeassistant.companion.android&hl=en). This app has very good reviews and lets you connect to Home Assistant perfectly from your phone.
+
+This is how good it looks:
+![Home Assistant Android](/posts/2026-01-23-home-assistant-thermostat-android.jpg)
+
+### 3. Security: Remote access with Tailscale
+
+One of the biggest fears when automating a house is security. How do I control the heating from the street without opening ports on the router and exposing my network to hackers?
+
+The answer is [**Tailscale**](https://tailscale.com/). I installed this tool on the laptop and on my phones. It creates a private virtual network (VPN) that allows me to connect my devices securely and encrypted, as if they were all in the same room, without complex network configurations.
+
+### 4. The Hardware: ESP8266
+
+For the physical part, I used two **ESP8266** modules, Wi‑Fi microcontrollers that cost just a few euros. The setup is as follows:
+
+* **Module A (Sensor):** Connected to a **DHT11** sensor. It reads the room temperature and humidity and sends it to the server.
+
+* **Module B (Actuator):** Controls an **optocoupler**. This component is key: it electrically isolates the microcontroller circuit from the boiler circuit. It is connected to the heater terminals to turn it on or off according to the logic we define. I used the [PC817](https://amzn.to/3LSKbfp) phototransistor and soldered it directly to a prototyping PCB with the ESP8266 module. Remember to limit the diode drive current so you don't burn it, and that the input and output terminals have polarity. I sized the series resistor to introduce 20 mA, more than enough. A [relay](https://amzn.to/45vGIu5) would have worked just the same, but being mechanical it has a shorter life.
+
+This is my actuator module:
+![Modulo Actuador](/posts/2026-01-23-home-assistant-thermostat-modulo-actuador.jpg)
+
+### 5. The Software: The magic of ESPHome
+
+Here's where everything makes sense. In the past, programming these chips required C++ code and complex environments. Today we use [**ESPHome**](https://esphome.io/).
+
+ESPHome is firmware designed for Espressif development boards (such as the ESP32 and the ESP8266). The great thing is its story: it worked so well that the Home Assistant developers (Nabu Casa) [acquired the project in 2021](https://www.home-assistant.io/blog/2021/03/18/nabu-casa-has-acquired-esphome/) and integrated it natively into the platform. To work with ESPHome from Home Assistant you need to install the **ESPHome Device Builder** add‑on.
+
+![ESPHome Device Builder](/posts/2026-01-23-home-assistant-thermostat-esphome-add-on.png)
+
+Thanks to this, I programmed the modules directly from the Home Assistant panel. You don't write C++ code, just a simple YAML configuration file, and Home Assistant takes care of compiling it and sending it to the microprocessors over WiFi (OTA). It's incredibly easy and extremely powerful. The only caveat is that you must flash the module the first time over USB by connecting it to the computer running Home Assistant. After that you can perform wireless updates.
+
+Below I describe how I programmed each of the components:
+
+#### Module A (Sensor):
+\`\`\`yaml
+esphome:
+  name: "dht11-sensor"
+  friendly_name: DHT11 Sensor
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    # This key is generated automatically when the node is created. Don't share it!
+    key: "AUTO_GENERATED_ENCRYPTION_KEY"
+
+ota:
+  - platform: esphome
+    # Password for wireless updates. Keep it secret!
+    password: "AUTO_GENERATED_OTA_PASSWORD"
+
+wifi:
+  # We use secrets so we don't expose WiFi credentials in the code
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Fallback hotspot: activates if the main WiFi connection fails
+  ap:
+    ssid: "DHT11 Sensor Fallback Hotspot"
+    password: "HOTSPOT_PASSWORD"
+
+captive_portal:
+
+sensor:
+  - platform: dht
+    pin: 2
+    model: DHT11
+    temperature:
+      name: "DHT11 Sensor Temperature"
+      # Calibration: I noticed it measured 2 degrees too high
+      filters:
+        - offset: -2.0
+    humidity:
+      name: "DHT11 Sensor Humidity"
+    update_interval: 120s
+\`\`\`\n
+To help you understand what we're "flashing" onto the chip, here are the main blocks explained:
+
+* esphome and esp8266: These are the device's ID. We give it a name to identify it on the network and tell the compiler which physical hardware we're using (the board). It's vital to choose the correct board so the pins behave properly.
+
+* api: This is the magic. Instead of complex setups, this block enables the native connection with Home Assistant. It's bidirectional, instantaneous and secured by the encryption key.
+
+* ota (Over-The-Air): Indispensable. It means you'll only need to connect the ESP8266 to the computer the first time. Future code updates you will send over WiFi from the sofa.
+
+* wifi and ap: Here we define the connection.
+
+* Check the ap (Access Point) block. If you change your router password or the WiFi fails, the device doesn't stay "dead"; it creates its own emergency WiFi network so you can connect to it and give it the new credentials.
+
+* sensor: Here we define the logic of the physical component.
+
+* model: We specify that it's a DHT11 (the blue one) and not a DHT22 (the white one, which is more accurate).
+
+* filters: This is very powerful. Cheap sensors aren't always accurate. With offset: -2.0 I'm telling the chip: "Read the temperature, subtract 2 degrees to correct the error, and then send it to Home Assistant." It's a simple and effective software calibration.
+
+* update_interval: We read every 2 minutes (120s). There's no need to read temperature every second; doing so would only saturate the network and heat the chip unnecessarily.
+
+
+#### Module B (Actuator):
+\`\`\`yaml
+esphome:
+  name: thermostat
+  friendly_name: Thermostat
+
+esp8266:
+  board: d1_mini # Or whatever board you're using (e.g. nodemcuv2)
+
+logger:
+
+api:
+  encryption:
+    key: "YOUR_ENCRYPTION_KEY_HERE"
+
+ota:
+  - platform: esphome
+    password: "YOUR_OTA_PASSWORD_HERE"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "Thermostat Fallback"
+    password: "YOUR_FALLBACK_PASSWORD"
+
+captive_portal:
+
+# ---------------------------------------------------------
+# HARDWARE
+# ---------------------------------------------------------
+switch:
+  - platform: gpio
+    pin: 13 # D7 pin on the Wemos D1 Mini
+    id: opto_heater
+    name: "Heater Relay (Hardware)"
+    internal: false 
+    # If power is lost and returns, start OFF for safety
+    restore_mode: ALWAYS_OFF
+
+# ---------------------------------------------------------
+# USER INTERFACE (Creates controls in Home Assistant)
+# ---------------------------------------------------------
+select:
+  - platform: template
+    name: "Thermostat Mode"
+    id: modo_calefaccion
+    options:
+      - "Off"
+      - "Auto"
+      - "Manual On"
+    initial_option: "Off"
+    optimistic: true # State changes when pressed without waiting for confirmation
+    icon: mdi:cog
+    # When mode changes, execute the logic immediately
+    on_value:
+      then:
+        - script.execute: logica_control
+
+number:
+  - platform: template
+    name: "Target Temperature"
+    id: temp_objetivo
+    min_value: 15
+    max_value: 30
+    step: 0.5
+    initial_value: 21
+    optimistic: true
+    unit_of_measurement: "°C"
+    mode: slider
+    icon: mdi:thermometer-lines
+    # When you change the temperature, recalc whether to turn heater on/off
+    on_value:
+      then:
+        - script.execute: logica_control
+
+# ---------------------------------------------------------
+# REMOTE SENSOR AND SAFETY
+# ---------------------------------------------------------
+sensor:
+  # PRO TIP: import the sensor from the OTHER module via Home Assistant
+  - platform: homeassistant
+    id: temperatura_remota
+    # This is the entity ID in your Home Assistant (the sensor from module A)
+    entity_id: sensor.dht11_sensor_temperature 
+    internal: true # Don't show it in HA (we already have it there)
+    # Each time a new temperature arrives:
+    on_value:
+      then:
+        - script.execute: watchdog_seguridad # Reset the safety timer
+        - script.execute: logica_control     # Check if the heater should switch
+
+# ---------------------------------------------------------
+# SCRIPTS (SYSTEM BRAIN)
+# ---------------------------------------------------------
+script:
+  # 1. WATCHDOG: critical safety
+  # If Home Assistant crashes or WiFi fails, this script
+  # will shut the heater off after 30 minutes to avoid overheating.
+  - id: watchdog_seguridad
+    mode: restart # Each call resets the 30min counter
+    then:
+      - delay: 30min
+      - logger.log: "CRITICAL ALERT: No HA data for 30min. Turning off heater."
+      - select.set:
+          id: modo_calefaccion
+          option: "Off"
+      - switch.turn_off: opto_heater
+
+  # 2. CONTROL LOGIC (Hysteresis)
+  - id: logica_control
+    then:
+      - lambda: |-
+          // Get current values
+          std::string modo = id(modo_calefaccion).state;
+          float actual = id(temperatura_remota).state;
+          float objetivo = id(temp_objetivo).state;
+          float histeresis = 0.5; // Margin to avoid rapid switching
+
+          // Safety: if we're in Auto but the sensor is invalid, turn off
+          if (isnan(actual) && modo == "Auto") {
+            ESP_LOGW("thermostat", "Error: invalid sensor in Auto mode. Turning off.");
+            id(opto_heater).turn_off();
+            return;
+          }
+
+          // --- CASE 1: MODE OFF ---
+          if (modo == "Off") {
+            if (id(opto_heater).state) {
+               id(opto_heater).turn_off();
+               ESP_LOGD("thermostat", "Mode OFF: turning off.");
+            }
+          }
+          
+          // --- CASE 2: MANUAL ON (force on) ---
+          else if (modo == "Manual On") {
+            if (!id(opto_heater).state) {
+               id(opto_heater).turn_on();
+               ESP_LOGD("thermostat", "Manual mode: turning on.");
+            }
+          }
+
+          // --- CASE 3: AUTO (smart thermostat) ---
+          else if (modo == "Auto") {
+            // Too cold: turn on (Actual <= Target - 0.5)
+            if (actual <= (objetivo - histeresis)) {
+              if (!id(opto_heater).state) {
+                id(opto_heater).turn_on();
+                ESP_LOGD("thermostat", "Auto: it's cold. Turning on.");
+              }
+            } 
+            // Too hot: turn off (Actual >= Target + 0.5)
+            else if (actual >= (objetivo + histeresis)) {
+              if (id(opto_heater).state) {
+                id(opto_heater).turn_off();
+                ESP_LOGD("thermostat", "Auto: temperature reached. Turning off.");
+              }
+            }
+          }
+
+# ---------------------------------------------------------
+# MAINTENANCE
+# ---------------------------------------------------------
+interval:
+  - interval: 10min
+    then:
+      - lambda: |-
+          // Every 10 min, force the logic in case the relay got stuck
+          if (id(modo_calefaccion).state == "Manual On") {
+            id(opto_heater).turn_on();
+          } else {
+             id(logica_control).execute();
+          }
+\`\`\`
+
+This code is different from the sensor one. Here we not only read data, we make decisions. It is installed in the module that sits next to the boiler (Actuator). Let's break down the key sections:
+
+1. **User Interface (select and number)** Instead of creating buttons in Home Assistant, we create them directly on the chip. Here we specify how we want the data to integrate with Home Assistant.
+
+* Thermostat Mode: lets us choose between "Off", "Auto" and "Manual On".
+* Target Temperature: a slider for selecting the desired degrees. Once set here, the chip remembers it even if Home Assistant restarts.
+
+2. **The Sensor** This is where the magic happens. Where does it get the data? It uses the homeassistant platform to "import" the value from the DHT11 sensor we installed in the other room.
+
+* Flow: Sensor Module → WiFi → Home Assistant → WiFi → Actuator Module.
+
+3. **The Watchdog** This is vital for heating. What happens if the WiFi drops or Home Assistant hangs while the boiler is on? The boiler would keep burning gas until the house reached 40 °C. To avoid this I've programmed a watchdog:
+
+* Every time a temperature reading arrives, the timer resets.
+* If **30 minutes** pass without data (network failure), the script assumes the worst and **turns the boiler off automatically**.
+
+4. **Lambda Logic (C++)** The brain of the system. We use a lambda to decide whether to turn the heater on or off. It includes **hysteresis** of 0.5 °C.
+
+* Without hysteresis: if you set 21 °C the heater would turn on at 20.99 °C and off at 21.01 °C, cycling every few seconds (which would damage the boiler).
+* With hysteresis: it turns on at 20.5 °C and off at 21.5 °C. Longer, healthier cycles for your equipment.
+
+5. **Refresh Interval** Every 10 minutes the system "checks" that everything is OK. This keep‑alive ensures the module remains active and periodically verifies the control mode.
+
+### 6. Final configurations
+
+I created the Home Automation dashboard manually with the following configuration file:
+
+\`\`\`yaml
+type: entities
+title: Living Room Thermostat
+entities:
+  # --- CONTROL SECTION (Inputs) ---
+  - entity: select.thermostat_modo_termostato
+    name: Operation mode
+  
+  # Slider or numeric input for the temperature
+  - entity: number.thermostat_temperatura_objetivo
+    name: Target temperature
+
+  # --- VISUAL SEPARATOR ---
+  - type: section
+    label: Real-time information
+
+  # --- DATA SECTION (Outputs) ---
+  # The remote sensor (from the other ESP8266)
+  - entity: sensor.dht11_sensor_dht11_sensor_temperature
+    name: Current temp (remote sensor)
+    icon: mdi:thermometer
+  
+  # Humidity
+  - entity: sensor.dht11_sensor_dht11_sensor_humidity
+    name: Relative humidity
+
+  # --- VISUAL FEEDBACK ---
+  # See if the relay is physically on or off
+  - entity: switch.thermostat_rele_calefaccion_hardware
+    name: Boiler state (relay)
+    state_color: true
+    secondary_info: last-updated
+\`\`\`\n
+![Home Assistant Dashboard](/posts/2026-01-23-home-assistant-thermostat-android.jpg)
+
+---
+
+**Feel like tinkering?**
+With a minimal investment and an afternoon of configuration, you have a system that rivals high-end ones. If you have questions about the wiring diagram or YAML configuration, write to me and we can go over it.
 `,
   author: 'Gabriel Faleiro',
   date: new Date('2026-01-23'),

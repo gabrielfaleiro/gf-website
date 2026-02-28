@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ALL_POSTS } from '../../posts/index';
+import translations, { Lang } from '../../src/translations';
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('es-ES', { 
@@ -61,6 +62,7 @@ const CodeBlock = ({ language, children }: { language: string; children: string 
 
 export const PostDetail: React.FC = () => {
   const { postId, lang = 'es' } = useParams<{ postId: string, lang: string }>();
+  const t = translations.postDetail[(lang as Lang) || 'es'];
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
@@ -76,8 +78,11 @@ export const PostDetail: React.FC = () => {
 
   if (!post) return null;
 
+  const title = lang === 'en' ? (post.title_en || post.title_es) : post.title_es;
+  const content = lang === 'en' ? (post.content_en || post.content_es) : post.content_es;
+
   const shareUrl = window.location.href;
-  const shareText = `He leído este interesante artículo: ${post.title}`;
+  const shareText = `I read this interesting article: ${title}`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareUrl);
@@ -95,13 +100,13 @@ export const PostDetail: React.FC = () => {
           <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
           </svg>
-          Volver al Blog
+          {t.backToBlog}
         </Link>
 
         <div className="mb-12">
           <span className="text-blue-900 text-xs font-black uppercase tracking-widest mb-4 block">{post.category}</span>
           <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-8 tracking-tighter">
-            {post.title}
+            {title}
           </h1>
           <div className="flex items-center justify-between py-6 border-y border-gray-100">
             <div className="flex items-center gap-3">
@@ -117,7 +122,7 @@ export const PostDetail: React.FC = () => {
         </div>
 
         <div className="aspect-[21/9] rounded-[2.5rem] overflow-hidden mb-16 shadow-2xl">
-          <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
+          <img src={post.imageUrl} alt={title} className="w-full h-full object-cover" />
         </div>
 
         <div className="prose prose-lg prose-blue max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:leading-relaxed prose-p:text-gray-600 prose-blockquote:border-l-4 prose-blockquote:border-blue-900 prose-blockquote:bg-blue-50/50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:italic overflow-x-auto">
@@ -139,14 +144,14 @@ export const PostDetail: React.FC = () => {
               }
             }}
           >
-            {post.content}
+            {content}
           </ReactMarkdown>
         </div>
 
         <div className="mt-20 pt-12 border-t border-gray-100">
           <div className="text-center mb-8">
-            <h4 className="text-lg font-black uppercase tracking-widest text-gray-900">Comparte este artículo</h4>
-            <p className="text-gray-400 text-sm mt-1 font-medium">Ayúdame a difundir el conocimiento.</p>
+            <h4 className="text-lg font-black uppercase tracking-widest text-gray-900">{t.shareTitle}</h4>
+            <p className="text-gray-400 text-sm mt-1 font-medium">{t.shareDesc}</p>
           </div>
           
           <div className="flex flex-wrap justify-center gap-4">
@@ -187,7 +192,7 @@ export const PostDetail: React.FC = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002 2h-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
               </svg>
-              {copied ? '¡Copiado!' : 'Copiar enlace'}
+              {copied ? t.copied : t.copyLink}
             </button>
           </div>
         </div>

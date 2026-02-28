@@ -13,9 +13,11 @@ import { Post, Category } from '../types';
 
 export const post: Post = {
   id: 'swiftduino-open-source-arduino', 
-  title: 'Swiftduino: Mi paleta de código Arduino open source',
-  excerpt: 'Comienzo un proyecto open source para unificar y compartir el código Arduino modular que he creado para acelerar el desarrollo de proyectos.',
-  content: `
+  title_es: 'Swiftduino: Mi paleta de código Arduino open source',
+  title_en: 'Swiftduino: My Open Source Arduino Code Palette',
+  excerpt_es: 'Comienzo un proyecto open source para unificar y compartir el código Arduino modular que he creado para acelerar el desarrollo de proyectos.',
+  excerpt_en: 'I start an open source project to unify and share the modular Arduino code I have created to accelerate project development.',
+  content_es: `
 
 Comienzo un proyecto open source con el objetivo de unificar y compartir el código Arduino que he creado para modularizar los desarrollos rápidos que realizo en mi tiempo libre.
 
@@ -32,6 +34,24 @@ Puedes explorar el repositorio completo de Swiftduino en GitHub, donde encontrar
 **[👉 Ver Swiftduino en GitHub](https://github.com/gabrielfaleiro/swiftduino/tree/main)**
 
 > 💡 **Tip:** El repositorio está en constante evolución. Si tienes alguna sugerencia o encuentras un bug, no dudes en abrir un issue o hacer un pull request. ¡Toda contribución es bienvenida!
+  `,
+  content_en: `
+
+I am starting an open source project with the goal of unifying and sharing the Arduino code I have created to modularize the quick developments I do in my spare time.
+
+**Swiftduino** is the name I have given to my palette of modular and maintainable code to assemble more complex functionalities easily. "The basis of efficiency is repetition", so I share my code with you so you can reuse it.
+
+Arduino is a fantastic rapid prototyping platform to which we owe many hours of fun and learning. In addition, it has compatibility with many SoCs and microprocessors.
+
+I hope it saves you some time programming and helps you get your projects done. I am happy to receive suggestions and improvements to the code.
+
+## 🚀 GitHub Repository
+
+You can explore the complete Swiftduino repository on GitHub, where you will find all the modular code, examples and documentation:
+
+**[👉 View Swiftduino on GitHub](https://github.com/gabrielfaleiro/swiftduino/tree/main)**
+
+> 💡 **Tip:** The repository is constantly evolving. If you have any suggestions or find a bug, don't hesitate to open an issue or make a pull request. All contributions are welcome!
   `,
   author: 'Gabriel Faleiro',
   date: new Date('2024-01-13'), 

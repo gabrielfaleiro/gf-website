@@ -1,7 +1,6 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
-import { HashRouter, Routes, Route, Navigate, useParams, Outlet } from 'react-router-dom';
-import { Post } from './types';
+import React, { useState, useMemo } from 'react';
+import { HashRouter, Routes, Route, Navigate, useParams, Outlet, useLocation } from 'react-router-dom';
 import { ALL_POSTS } from './posts/index';
 import { Navigation } from './components/layout/Navigation';
 import { Footer } from './components/layout/Footer';
@@ -13,35 +12,48 @@ import { Resources } from './components/sections/Resources';
 import { PrivacyPolicy } from './components/sections/PrivacyPolicy';
 import { LegalNotice } from './components/sections/LegalNotice';
 import { CookiesPolicy } from './components/sections/CookiesPolicy';
+import { TVCA } from './components/sections/TVCA';
 import { NotFound } from './components/sections/NotFound';
 import { CookieBanner, CookieSettings } from './components/widgets/CookieBanner';
 import { ScrollToTop } from './components/layout/ScrollToTop';
+import { setCookie, getCookie, LANG_COOKIE_NAME, VALID_LANGS } from './utils/cookies';
+import { getPathWithoutLang } from './utils/lang';
 
-// Utilidades para gestión de cookies
-const setCookie = (name: string, value: string, days: number) => {
-  const expires = new Date();
-  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
-};
-
-const getCookie = (name: string) => {
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+/**
+ * Redirige desde la raíz "/" al idioma preferido (cookie) o español por defecto.
+ * Si no hay cookie, guarda "es" al redirigir.
+ */
+const RootRedirect = () => {
+  const savedLang = getCookie(LANG_COOKIE_NAME);
+  const targetLang = savedLang === 'en' ? 'en' : 'es';
+  if (!savedLang) {
+    setCookie(LANG_COOKIE_NAME, 'es', 365);
   }
-  return null;
+  return <Navigate to={`/${targetLang}`} replace />;
 };
 
-// Componente Wrapper para inyectar lógica de idioma
+/**
+ * Wrapper que valida el idioma en la URL, sincroniza con la cookie y redirige si es necesario.
+ * - Si no hay cookie: guarda el lang de la URL.
+ * - Si la cookie no coincide con la URL: redirige a /{cookie}/{restoDeRuta}.
+ */
 const LangWrapper = () => {
   const { lang } = useParams<{ lang: string }>();
-  const validLangs = ['es']; // Preparado para añadir 'en', etc. a futuro
+  const location = useLocation();
+  const pathname = location.pathname;
 
-  if (!lang || !validLangs.includes(lang)) {
-    return <Navigate to="/es" replace />;
+  if (!lang || !VALID_LANGS.includes(lang as 'es' | 'en')) {
+    const cookieLang = getCookie(LANG_COOKIE_NAME);
+    const targetLang = cookieLang && VALID_LANGS.includes(cookieLang as 'es' | 'en') ? cookieLang : 'es';
+    return <Navigate to={`/${targetLang}`} replace />;
+  }
+
+  const savedLang = getCookie(LANG_COOKIE_NAME);
+  if (!savedLang) {
+    setCookie(LANG_COOKIE_NAME, lang, 365);
+  } else if (savedLang !== lang) {
+    const restPath = getPathWithoutLang(pathname);
+    return <Navigate to={`/${savedLang}${restPath}`} replace />;
   }
 
   return (
@@ -57,19 +69,19 @@ const LangWrapper = () => {
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [cookieConsent, setCookieConsent] = useState<CookieSettings | null>(null);
-  const [showCookieSettings, setShowCookieSettings] = useState(false);
-
-  useEffect(() => {
+  const [cookieConsent, setCookieConsent] = useState<CookieSettings | null>(() => {
     const savedConsent = getCookie('gabriel-faleiro-consent');
     if (savedConsent) {
       try {
-        setCookieConsent(JSON.parse(savedConsent));
+        return JSON.parse(savedConsent);
       } catch (e) {
         console.error("Error al parsear la cookie de consentimiento");
+        return null;
       }
     }
-  }, []);
+    return null;
+  });
+  const [showCookieSettings, setShowCookieSettings] = useState(false);
 
   const handleCookieAccept = (settings: CookieSettings) => {
     setCookieConsent(settings);
@@ -79,8 +91,8 @@ function App() {
 
   const filteredPosts = useMemo(() => {
     return ALL_POSTS.filter(post => 
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchQuery.toLowerCase())
+      post.title_es.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.content_es.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
 
@@ -90,8 +102,8 @@ function App() {
     <HashRouter>
       <ScrollToTop />
       <Routes>
-        {/* Redirección de la raíz a español por defecto */}
-        <Route path="/" element={<Navigate to="/es" replace />} />
+        {/* Redirección de la raíz según cookie de idioma */}
+        <Route path="/" element={<RootRedirect />} />
 
         {/* Grupo de rutas con prefijo de idioma */}
         <Route path="/:lang" element={<LangWrapper />}>
@@ -117,12 +129,13 @@ function App() {
               onUpdateConsent={handleCookieAccept}
             />
           } />
+          <Route path="tvca" element={<TVCA />} />
           {/* 404 contextualizado dentro del idioma */}
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* Captura cualquier otra ruta mal formada y redirige al inicio en español */}
-        <Route path="*" element={<Navigate to="/es" replace />} />
+        {/* Captura cualquier otra ruta mal formada y redirige según cookie de idioma */}
+        <Route path="*" element={<RootRedirect />} />
       </Routes>
 
       {(!cookieConsent || showCookieSettings) && (
