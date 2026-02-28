@@ -17,6 +17,9 @@ const formatDate = (date: Date) => {
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const { lang = 'es' } = useParams<{ lang: string }>();
+  
+  const title = lang === 'en' ? (post.title_en || post.title_es) : post.title_es;
+  const excerpt = lang === 'en' ? (post.excerpt_en || post.excerpt_es) : post.excerpt_es;
 
   return (
     <Link 
@@ -26,7 +29,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <div className="relative aspect-[16/10] overflow-hidden">
         <img 
           src={post.imageUrl} 
-          alt={post.title} 
+          alt={title} 
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -36,10 +39,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       </div>
       <div className="p-7">
         <h3 className="text-xl font-bold text-gray-900 leading-[1.3] group-hover:text-blue-900 transition-colors mb-4">
-          {post.title}
+          {title}
         </h3>
         <p className="text-gray-500 text-sm mb-6 line-clamp-2 leading-relaxed">
-          {post.excerpt}
+          {excerpt}
         </p>
         <div className="flex items-center justify-between pt-5 border-t border-gray-50">
           <div className="flex items-center gap-2">
