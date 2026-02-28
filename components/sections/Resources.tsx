@@ -26,7 +26,7 @@ export const Resources: React.FC = () => {
                 <div className="aspect-[16/10] overflow-hidden bg-blue-50">
                   <img 
                     src={resource.imageUrl} 
-                    alt={resource.name} 
+                    alt={lang === 'en' ? (resource.name_en || resource.name_es) : resource.name_es}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" 
                   />
                 </div>

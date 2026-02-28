@@ -24,6 +24,8 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
   const [settings, setSettings] = useState<CookieSettings>(initialSettings || {
     analysis: true
   });
+  const { lang = 'es' } = useParams<{ lang: string }>();
+  const t = translations.cookiesPolicy[(lang as Lang) || 'es'];
 
   const handleSave = () => {
     onAccept(settings);
@@ -43,9 +45,6 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({
   };
 
   if (view === 'settings') {
-    const { lang = 'es' } = useParams<{ lang: string }>();
-    const t = translations.cookiesPolicy[(lang as Lang) || 'es'];
-
     return (
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
         <div className="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden">

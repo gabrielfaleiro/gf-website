@@ -184,8 +184,32 @@ export const translations = {
     }
   },
   tvca: {
-    es: { addContactLabel: 'Añadir contacto', webPersonal: 'Web personal', linkedInPersonal: 'LinkedIn Personal', webEmployedCompany: 'Web de la empresa' },
-    en: { addContactLabel: 'Add contact', webPersonal: 'Personal website', linkedInPersonal: 'Personal LinkedIn', webEmployedCompany: 'Company website' }
+    es: {
+      addContactLabel: 'Añadir Contacto',
+      contactDetails: 'Detalles de Contacto',
+      socialProfiles: 'Perfiles Personales',
+      webPersonal: 'Web Personal',
+      linkedInPersonal: 'LinkedIn Personal',
+      webEmployedCompany: 'Web de la Empresa',
+      phoneLabel: 'Teléfono',
+      emailLabel: 'Email',
+      websiteLabel: 'Sitio Web',
+      showQRLabel: 'Mostrar Código QR',
+      scanQRLabel: 'Escanea el Código QR'
+    },
+    en: {
+      addContactLabel: 'Add Contact',
+      contactDetails: 'Contact Details',
+      socialProfiles: 'Personal Profiles',
+      webPersonal: 'Personal Website',
+      linkedInPersonal: 'Personal LinkedIn',
+      webEmployedCompany: 'Company website',
+      phoneLabel: 'Phone',
+      emailLabel: 'Email',
+      websiteLabel: 'Website',
+      showQRLabel: 'Show QR Code',
+      scanQRLabel: 'Scan QR Code'
+    }
   },
   navigation: {
     es: {

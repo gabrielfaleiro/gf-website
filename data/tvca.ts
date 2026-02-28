@@ -31,5 +31,9 @@ export const TVCA_DATA = {
   /** LinkedIn personal */
   linkedInPersonal: 'https://www.linkedin.com/in/gabrielfaleiro/',
   /** Web personal */
-  webPersonal: 'https://gabrielfaleiro.com/',
+  webPersonal: 'https://gabrielfaleiro.com',
+  /** Web de la empresa */
+  webCompany: 'https://wiloc.com',
+  /** Avatar / headshot URL */
+  avatar: '/visit_card/gabriel.jpg',
 } as const;

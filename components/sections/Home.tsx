@@ -66,7 +66,7 @@ export const Home: React.FC = () => {
                 height="352" 
                 frameBorder="0" 
                 allowFullScreen={true} 
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                allow="autoplay; clipboard-write; fullscreen; picture-in-picture" 
                 loading="lazy">
               </iframe>
             </div>
